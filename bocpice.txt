@@ -1,0 +1,60 @@
+ident_b ::= < CHAR, 5, FORMAT "99999" : AUTONUMBER : LEADING ZERO >
+sifra_b ::= < CHAR, 5, FORMAT "A.A.9.9.9" >
+naziv_b ::= < CHAR, 40 >
+koli_b ::= < NUMBER, 3, FORMAT "999", DEFAULT 1 >
+jm_b ::= < CHAR, 3, FORMAT "AAA", DEFAULT VALUE "KOM" >
+koli_zap ::= < NUMBER, 3, FORMAT "9999.999", DEFAULT 1 >
+jm_z ::= < CHAR, 3, FORMAT "AAA", DEFAULT VALUE "LIT" >
+boca ::= < ident_b, sifra_b, naziv_b, koli_b, jm_b, koli_zap, jm_z >
+DBOCA := { boca : PRIMARY KEY IS ident_b
+			KEY IS sifra_b
+			KEY IS naziv_b }
+****************************************
+ident ::= < CHAR, 5, FORMAT "99999" : AUTONUMBER : LEADING ZERO >
+sifra ::= < CHAR, 1, FORMAT "A" >
+naziv ::= < CHAR, 40 >
+ident_k ::= DKOM.ident_k
+ident_b ::= DBOCA.ident_b
+k_ulaz ::= < NUMBER, 9.2 >
+k_izlaz ::= < NUMBER, 9.2 >
+naruceno ::= < NUMBER, 9.2 >
+jm ::= < CHAR, 3, FORMAT "AAA": DEFAULT VALUE DBOCA.jm_b >
+n_cena ::= < NUMBER, 9.2 >
+p_cena ::= < NUMBER, 13.4 >
+pice ::= < ident, sifra, naziv, komitent, ident_b, k_ulaz, k_izlaz,
+naruceno, jm, n_cena, p_cena >
+DPICE := { pice : PRIMARY KEY IS ident
+			KEY IS ident_b
+			KEY IS ident_k
+			KEY IS naziv
+			KEY IS sifra }
+
+***********************************
+KOMINTENT
+ident_k ::= < CHAR, 5, FORMAT "99999" : AUTONUMBER : LEADING ZERO >
+sifra ::= < CHAR, 1, FORMAT "9.A" >
+naziv ::= < CHAR, 40 >
+adresa ::= < CHAR, 60 >
+p_broj ::= < CHAR, 5 >
+mesto ::= < CHAR, 40 >
+tel ::= < CHAR, 15 >
+ziro ::= < CHAR, 20 >
+MB ::= < CHAR, 15 >
+PIB ::= < CHAR, 15 >
+komitent ::= < ident_k, sifra, naziv, adresa, p_broj, mesto,
+tel, ziro, MB, PIB >
+DKOM := { komitent : PRIMARY KEY IS ident_k
+			KEY IS naziv
+			KEY IS sifra_k }
+**********************************************
+ULAZ se sastoji od kolicina i cena tada:
+
+DPICE.n_cena = ULAZ.cena
+DPICE.k_ulaz += ULAZ.kolicina
+DPICE.p_cena = max( DPICE.p_cena, ULAZ.cena )
+
+IZLAZ se sastoji od kolicina i cena tada:
+
+IZLAZ.cena = DPICE.p_cena
+DPICE.k_izlaz += IZLAZ.kolicina
+

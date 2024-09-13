@@ -1,0 +1,41 @@
+ident   ::= <CHAR, 5 : AUTONUMBER : LEADINGZEROES >
+sifra   ::= <CHAR, 3>
+naziv   ::= <CHAR, 60>
+artikal ::= <ident, sifra, naziv>
+DPM      := { artikal : PRIMARY KEY IS ident, 
+                                KEY IS sifra }
+								
+sifra je oblika A_{1}.A_{2} gde je:
+A_{1} \in \big\{ P, M big\}, P -- proizvod, M -- je materijal								 
+A_{2} \in \big\{ B, S, H, P \}, B -- materijal brašno, S -- materijal so, H -- proizvod hleb, P -- proizvod pecivo
+
+------------------------------
+
+ident_p    ::= DPM.ident   
+ident_m    ::= DPM.ident       // ako je potrebno uvesti redosled 
+kolicina   ::= <NUMERIC, 13.4>
+jm         ::= <CHAR, 3>
+red_recept ::= <ident_p, ident_m, kolicina>
+DR          := { red_recept : KEY IS ident_p, 
+                              KEY IS ident_m } 
+
+------------------------------
+
+dan        ::= <DATE>
+ident      ::= DPM.ident
+kolicina   ::= <NUMERIC, 13.4>
+jm         ::= <CHAR, 3>
+
+kupiti     ::= <dan, ident, kolicina, jm>
+DKUPI       := { kupiti : PRIMARY KEY IS dan+ident,
+                                  KEY IS ident }
+								  
+------------------------------
+
+cena je namerno izostavljena, Vi je postavite...								  
+
+------------------------------
+
+DKUPI.dan, svaki DKUPI.ident == DR.ident_p, svaki DR.ident_m, DKUPI.kolicina * DR.kolicina, DR.jm   
+
+pravi spisak koliko materijala treba kupiti, iznos sami!								

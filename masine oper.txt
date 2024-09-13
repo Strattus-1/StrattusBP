@@ -1,0 +1,50 @@
+ident_masine    ::= <CHAR, 5 : FORMAT "99999" :AUTONUMBER :LEADINGZERO>
+sifra           ::= <CHAR, 5 : FORMAT "AA.AA"> // AA lokacija, AA vrsta
+naziv           ::= <CHAR, 60>
+masina          ::= <ident_masine, sifra, naziv> 
+DMT             :=  {masina PRIMARY KEY IS ident_masine, 
+                                    KEY IS sifra, 
+					                KEY IS naziv}
+								  
+ident_operacije ::= <CHAR, 5 : FORMAT "99999" :AUTONUMBER :LEADINGZERO>
+sifra           ::= <CHAR, 2 : FORMAT "AA">  // AA vrsta operacije 
+naziv           ::= <CHAR, 60>
+operacija       ::= <ident_operacije, sifra, naziv> 
+DOP             :=  {operacija PRIMARY KEY IS ident_operacije, 
+                                       KEY IS sifra, 
+					                   KEY IS naziv}    
+									
+ident_m_op      ::= <CHAR, 5 : FORMAT "99999" :AUTONUMBER :LEADINGZERO>
+ident_masine    ::= DMT.ident_masine
+ident_operacije ::= DOP.ident_operacije
+masina_oper     ::= <ident_m_op, ident_masine, ident_operacije>
+DOPM            :=  {masina_oper PRIMARY KEY IS ident_m_op,
+                                         KEY IS ident_masine,
+										 KEY IS ident_operacije}
+
+ident_zahvata 	::= <CHAR, 5 : FORMAT "99999" :AUTONUMBER :LEADINGZERO>					
+sifra           ::= <CHAR, 2 : FORMAT "AA">  // AA vrsta zahvata 
+naziv           ::= <CHAR, 60>
+zahvat          ::= <ident_zahvata, sifra, naziv> 
+DZAHP           :=  {zahvat PRIMARY KEY IS ident_zahvata, 
+                                    KEY IS sifra, 
+					                KEY IS naziv}
+									
+ident_zahvata   ::= DZAHP.ident_zahvata
+ident_operacije ::= DOP.ident_operacije
+redni_broj      ::= <NUMERIC, 3>
+isto_vreme      ::= <CHAR, 1> // 0 sukcesivni zahvat, 1 istovremeni 										 
+oper_zahvat     ::= <ident_zahvata, ident_operacije, redni_broj, isto_vreme>
+DZAH            :=  {oper_zahvat PRIMARY KEY IS ident_zahvata + ident_m_op + redni_broj
+                                         KEY IS ident_operacije}
+										 
+oper_zahvat     ::= DZAH.ident_zahvata + DZAH.ident_operacije + DZAH.redni_broj
+ident_alata     ::= DAL.ident_alata										 
+alat            ::= <oper_zahvat, ident_alata>	
+DZAHA           :=  {alat PRIMARY KEY IS oper_zahvat + alat     									
+					              KEY IS ident_alata                 
+                                  KEY IS oper_zahvat}	
+
+I dosta je.								  
+									
+									

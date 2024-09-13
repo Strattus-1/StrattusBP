@@ -1,0 +1,50 @@
+ident_grupe    ::= <CHAR, 5, :AUTONUMBER>
+sifra          ::= <CHAR,10, :FORMAT "XXXXXXXXXX"> //zakonodavac
+naziv_grupe    ::= <CHAR,60>
+stopa_procenat ::= <NUMERIC, 6.2>
+grupa          ::= <ident_grupe,sifra,naziv_grupe,stopa_procenat>
+DSTOPE         :=  {grupa : PRIMARY KEY ident_grupa,
+                                    KEY naziv_grupe}
+						  
+ident_osnovnih ::= <CHAR, 5, :AUTONUMBER>
+ident_grupe    ::= DSTOPE.ident_grupe
+sifra          ::= <CHAR, 3, :FORMA "AAA">         // sifra \in \{ OB, OP, AL, IN \}
+naziv          ::= <CHAR,60>
+moguca_osnovna ::= <ident_osnovnih,ident_grupe,sifra,naziv>
+DSTV           :=  {moguca_osnovna : PRIMARY KEY ident_osnovnih, 
+                                     KEY ident_grupe,
+							         KEY naziv}
+
+ident_lokacije ::= <CHAR, 5, :AUTONUMBER>
+sifra          ::= <CHAR, 3, :FORMAT "AA">		   // sifra \in \{ L, TU, SP \}				
+naziv          ::= <CHAR, 60>
+lokacija       ::= <ident_lokacije,sifra,naziv>
+DLOK           :=  {lokacija : PRIMARY KEY ident_lokacije,
+                                       KEY naziv}
+							
+ident          ::= <CHAR, 5, :AUTONUMBER>
+ident_osnovnih ::= DSTV.ident_osnovnih
+ident_lokacije ::= DLOK.ident_lokacije             // proveriti DS firme
+sifra          ::= <CHAR, ?>                       // preuzeti od DA firme
+naziv          ::= <CHAR, 60>                      // preuzeti od DA firme
+nabavna_vred   ::= <NUMERIC, 18.2>
+datum_nab      ::= <DATE>
+aktivno_st     ::= <CHAR, 1>                       // 1 = u upotrebi, 0 = van upotrebe 
+otpisano_st    ::= <CHAR, 1>                       // 1 = nije otpisano , 0 = otpisano, vrednost mu je 0
+osnovno_sred   ::= <ident,ident_osnovnih,ident_lokacije,sifra,naziv,
+                    nabavna_vred,datum_nab,aktivno_st,otpisano_st>
+DOS            :=  {osnovno_sred : PRIMARY KEY ident,				
+                                   KEY ident_osnovnih,
+							       KEY ident_lokacije,
+							       KEY naziv}
+
+// prvi slog mora uzeti od = DOS.datum_nab
+// uvek se u računu preuzima stopa_procenat, moguće je i 
+// beleženje stope za vremenski perod...
+ident          ::= DOS.ident
+od             ::= <DATE>			  // izračuna se otpisni interval 				
+do             ::= <DATE>             //
+stopa_procenat ::= <NUMERIC, 6.2>     // zgodno preuzeti 
+otp_vrednost   ::= <NUMERIC, 18.5>    // za period do - od dana računa se...
+stavka_otpisa  ::= <ident,od,do,stopa_procenat,poc_vrednost,otp_vrednost>
+DOSS           :=  {stavka_otpisa : PRIMARY KEY ident+od}

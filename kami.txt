@@ -1,0 +1,37 @@
+Zadatak 1.
+Napisati definiciju i fiziˇcku interpretaciju u MySQL-u tabele DKAMION, koja predstavlja spisak kamiona ˇspeditera.
+Zadatak 2.
+Napisati definiciju i fiziˇcku interpretaciju u MySQL-u tabele DVOZACI, koja registruje vozaˇce
+dostupne ( zaposlene i one koje je mogu´ce angaˇzovati ) ˇspediteru.
+Zadatak 3.
+Napisati definiciju i fiziˇcku interpretaciju u MySQL-u tabele DPUT, koja registruje put na koji
+su poslati kamioni sa ,,posadom”.
+Zadatak 4.
+Napisati definiciju i fiziˇcku interpretaciju u MySQL-u tabele DTROSKOVI, koja je ˇsifarnik
+mogu´cih troˇskova koji mogu nastati na putu.
+Zadatak 5.
+Napisati definiciju i fiziˇcku interpretaciju u MySQL-u tabele DPUTT, koja detaljizuje troskove
+nastale na svakom registrovanom putu.
+
+
+ident     ::= < CHAR(5) : AUTONUMBER >
+sifra     ::= < CHAR(8) : FORMAT( "AA.AA.AA" ) >
+naziv     ::= < CHAR(60) >
+trosak    ::= < ident, sifra, trosak >
+DTROSKOVI  := { trosak PRIMARY KEY IS ident, 
+                               KEY IS naziv } 
+
+
+
+Kako registrovati trošak nastao u Mađarskoj kupovinom 250 litara dizela i 5 
+litara rashladne tečnosti?
+
+Prvo se odredi šifra: Mađarska, 	gorivo, dizela
+
+                      EU     		GO    	D     ---> 'EU.GO.D ' je niska sifre
+
+00001 EU.GO.D Kupovina dizela u Evropskoj uniji
+00002 RS.HR.B Kupovina pljeskavica u Banja Luci
+00003 RS.HR.B Kupovina ćevapa u Banja Luci
+00004 BF.HR.B Kupovina boze u Roku na Baš Čaršiji				  
+				

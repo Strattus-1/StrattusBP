@@ -1,0 +1,111 @@
+//
+// U tablici 2.12. ( strana 60 ) kolona Oznaka
+// u tablici 2.12. Nastavak ( stana 60 ) kolona Oznaka ni(je) dvodelna
+// ali se pod njom nalazi kolona koja je zbunjujuća a mora ići u šifre!
+//
+
+//
+// Tablica je očigledno prepis iz JUS-a, loš naravno jer se mora gledati C 9999 ili CL9999 ili čak uklonjen naš 
+// standard i prihvaćen nečiji...
+// 
+
+// JUS se mora registrovati, svi ostali su sifra_?
+
+ident     ::= < CHAR, 5 : AUTONUMBER : LEADING ZERO >
+sifra     ::= < CHAR, 7 >                             // AA.9999 i odgovara JUS-u 
+sifra_1   ::= < CHAR, ? >                             // bez klasa, ? biće utvrđeno naknadno posmatranjem podataka
+naziv     ::= < CHAR, 40 >
+napomena  ::= < CHAR, 60 >
+mera      ::= < CHAR, 10 >
+materijal ::= < ident, sifra_1, sifra_2, naziv, materijal >
+DMAT       := { 
+                materijal PRIMARY KEY ident, 
+				                  KEY sifra_1,
+								  KEY sifra_2,
+								  KEY naziv
+              }
+			  
+-----------------------------------------------------------------------------------------------------------------			  
+
+< 00001, C .1120 ,                          , Cementirani čelici                 , JUS oznake        , u N/mm^2 >			  
+< 000?2, CL.0400 ,                          , Čelični liv                        , JUS oznake        , u N/mm^2 >	
+< 000?3,         , K.AlSil2Ni2CuMg          , Legure alumminijuma                , JUS oznake        , u N/mm^2 >	
+< 000?4, C .0370 , S235;1.0037              , Opšti konstrukcioni čelici         , EN oznaka 10025   , u N/mm^2 >	  
+< 000?5,         , GX2CrNiMoN26-7-4;1.4469  , Čelični liv za (nešto) po (nečemu) , EN oznaka I0213-4 , u N/mm^2 >		
+< 000?6,         , EN-GJMB-350-10;EN-JM1130 , Crni temper liv                    , EN oznaka 1562    , u N/mm^2 >		  
+
+*****************************************************************************************************************
+
+Obična tabela, jednostavno spojena sa materijalima.
+Ogroman broj slogova na jedan jedini slog 
+
+DMATR
+ident      ::= DMAT.ident
+Re         ::= < NUMERIC, 11.4 >
+Rm         ::= < NUMERIC, 11.4 >
+kolona_2_3 ::= < ident, Re, Rm >
+DMATR       := { kolona_2_3 KEY is ident }
+
+-----------------------------------------------------------------------------------------------------------------
+
+< 00001,    650.0000,    400.0000 >
+.
+.
+.
+< 00001,    800.0000,    400.0000 >
+
+...
+
+< 000?2,    450.0000,    230.0000 >
+
+...
+
+< 000?3,    180.0000,    180.0000 >
+.
+.
+.
+< 000?3,    220.0000,    180.0000 >
+.
+.
+.
+< 000?3,    220.0000,    200.0000 >
+.
+.
+.
+< 000?3,    220.0000,    200.0000 >
+
+...
+
+< 000?4,    235.0000,    340.0000 >
+.
+.
+.
+< 000?4,    235.0000,    470.0000 >
+
+....
+
+< 000?5,    480.0000,    650.0000 >
+.
+.
+.
+< 000?5,    480.0000,    850.0000 >
+
+*****************************************************************************************************************
+
+DMATZ, DMATS, DMATU su po strukturi i punjenju slogova jednake DMATR
+
+DMATZ(S)(U)
+ident      ::= DMAT.ident
+SigmaPrvo  ::= < NUMERIC, 11.4 >
+SigmaDrugo ::= < NUMERIC, 11.4 >
+kolone_P_D ::= < ident, SigmaPrvo, SigmaDrugo >
+DMATZ(S)(U) := { kolona_P_D KEY is ident }
+
+Način punjenja slogova je identičan kao za ident = 000?3.
+
+*****************************************************************************************************************
+
+tipovi veza:
+
+DMAT 1<-->n DMATR (Z)(S)(U)
+

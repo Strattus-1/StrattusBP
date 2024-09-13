@@ -1,0 +1,16 @@
+KOMINTENT
+ident_k ::= < CHAR, 5, FORMAT "99999" : AUTONUMBER : LEADING ZERO >
+sifra ::= < CHAR, 1, FORMAT "9.A" >
+naziv ::= < CHAR, 40 >
+adresa ::= < CHAR, 60 >
+p_broj ::= < CHAR, 5 >
+mesto ::= < CHAR, 40 >
+tel ::= < CHAR, 15 >
+ziro ::= < CHAR, 20 >
+MB ::= < CHAR, 15 >
+PIB ::= < CHAR, 15 >
+komitent ::= < ident_k, sifra, naziv, adresa, p_broj, mesto,
+tel, ziro, MB, PIB >
+DKOM := { komitent : PRIMARY KEY IS ident_k
+			KEY IS naziv
+			KEY IS sifra_k }

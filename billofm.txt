@@ -1,0 +1,50 @@
+DA
+ident   ::= < CHAR, 5, AUTONUMBER, LEADINGZERO >
+sifra   ::= < CHAR, ? >
+naziv   ::= < CHAR, 60 >
+jm      ::= < CHAR, 3 >
+artikal ::= < ident, sifra, naziv, jm >
+DA       := { 
+              artikal : PRIMARY KEY IS ident, 
+			                    KEY IS naziv
+            }
+*****************************************************************
+			
+DEBOM
+ident_n  ::= DA.ident
+ident_p  ::= DA.ident
+red      ::= < NUMERIC, 3 >
+kolicina ::= < NUMERIC, 11.4 >
+grana    ::= < ident_n, ident_p, red, kolicina >
+DEBOM     := { 
+               grana : PRIMARY KEY IS ident_n + ident_p, 
+                               KEY IS ident_n, 
+							   KEY IS ident_p
+             }		 
+{
+< 00008, 00001, 1, 1.0 > // formiran točak ( fotografija IMG_20240824_004534764_HDR, IMG_20240824_004613840_HDR, 
+< 00008, 00006, 2, 1.0 > //                              IMG_20240824_004941617_HDR, IMG_20240824_004955385_HDR,
+< 00008, 00003, 3, 1.0 > //                              IMG_20240824_005445934_HDR )
+< 00008, 00004, 4, 1.0 > //
+< 00008, 00007, 5, 1.0 > // 
+< 00011, 00009, 1, 1.0 >
+< 00011, 00010, 2, 1.0 >
+< 00011, 00008, 3, 2.0 > // prednji komplet točkova
+< 00022, 00021, 1, 1.0 >
+< 00022, 00008, 2, 2.0 > // zadnji komplet točkova
+
+< 00100, 00042, 1, 1.0 > // fotografija IMG_20240824_013911540, IMG_20240824_013911540                            
+< 00100, 00031, 2, 1.0 >
+< 00100, 00032, 3, 1.0 >
+< 00100, 00043, 4, 1.0 >
+< 00100, 00044, 5, 2.0 > // gotov model
+
+< 00032, 00040, 1, 1.0 > // formiran donji deo modela ( fotografija IMG_20240824_013839189, IMG_20240824_013911540
+< 00032, 00011, 2, 1.0 > //                                         IMG_20240824_013911540 )
+< 00032, 00022, 3, 1.0 > //
+< 00032, 00041, 4, 1.0 > // 
+
+// ostaje gornji deo modela koji se formira po fotografijama
+}
+
+ 
